@@ -152,14 +152,24 @@ const App: React.FC = () => {
 
   return (
     <div className={`min-h-screen ${theme === 'dark' ? 'bg-[#000000] text-zinc-100' : 'bg-white text-black'} transition-colors duration-700`}>
-      <Header />
+      <Header theme={theme} setTheme={setTheme} />
       
       <main className="relative pb-20">
         <CategorySelector 
           selectedCategory={selectedCategory} 
-          setSelectedCategory={setSelectedCategory} 
+          setSelectedCategory={(cat) => { setSelectedCategory(cat); window.scrollTo({ top: 0, behavior: 'smooth' }); }} 
         />
         
+        <QuoteCard 
+          verse={verse} 
+          loading={loading} 
+          error={error} 
+          textSize={textSize}
+          onRefresh={() => { fetchVerseData(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+          onSave={saveQuote}
+          onShare={handleShare}
+        />
+
         <SettingsBar 
           textSize={textSize} setTextSize={setTextSize}
           theme={theme} setTheme={setTheme}
@@ -167,15 +177,6 @@ const App: React.FC = () => {
           version={version} setVersion={setVersion}
         />
 
-        <QuoteCard 
-          verse={verse} 
-          loading={loading} 
-          error={error} 
-          textSize={textSize}
-          onRefresh={fetchVerseData}
-          onSave={saveQuote}
-          onShare={handleShare}
-        />
       </main>
 
       <Footer />
